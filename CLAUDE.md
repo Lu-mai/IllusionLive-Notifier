@@ -1,0 +1,79 @@
+# CLAUDE.md
+
+IllusionLive Notifier — `https://www.illusionlive.com/rss` 새 글 알림. Android 앱(주)과 Windows WinForms 앱.
+
+- `IllusionLiveNotifier.Android/` — Android 앱 (Java, SDK 없이 aapt2/d8/apksigner 직접 호출)
+- `IllusionLiveNotifier/` — Windows .NET WinForms 앱
+- `build-android.ps1` / `build.ps1` — 빌드 스크립트
+- 원격: `origin` = https://github.com/Lu-mai/IllusionLive-Notifier.git
+
+## GitHub 계정
+
+- 이 저장소의 커밋·push·PR·릴리스는 `Lu-mai` 계정으로만 수행한다.
+- 게시 전에 `gh api user --jq .login` 결과가 `Lu-mai`인지 확인한다. Git 인증과 GitHub CLI 인증은 별개다.
+- 다른 계정이면 게시를 중단한다. 전역 로그인은 변경하지 말고, 이 작업 프로세스에만 `Lu-mai` 인증을 적용한다. 토큰은 파일·로그·커밋에 남기지 않는다.
+
+## 빌드
+
+```powershell
+$env:ILLUSIONLIVE_KEYSTORE_PASSWORD = '<서명 키 비밀번호>'   # 없으면 빌드가 중단된다
+./build-android.ps1   # Android APK (JDK 17, Android SDK Platform/Build Tools 36 필요)
+./build.ps1           # Windows exe (dotnet publish, self-contained)
+```
+
+## 규칙: 파일 변경 시 PR 생성
+
+프로젝트 파일을 수정하면 작업 완료 후 반드시 PR까지 만든다. `main`에 직접 커밋하지 않는다.
+
+1. 최신 `main` 기반으로 작업 브랜치 생성 — 다른 브랜치 위에 쌓지 않는다
+
+   ```powershell
+   git fetch origin
+   git checkout -b <type>/<short-name> origin/main
+   ```
+
+2. 변경 사항 커밋 — 커밋 메시지는 Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …)
+3. `git push -u origin <branch>`
+4. `gh pr create` 로 PR 생성 — 제목은 커밋 타입 접두사 유지, 본문에 변경 요약과 검증 방법 기재
+
+PR 생성 전 확인:
+
+- 빌드/테스트 통과 (Android는 `./build-android.ps1` 이 `SelfTest` 를 함께 실행)
+- PR base 가 `main` 이고 브랜치가 `origin/main` 위에 선형으로 쌓였는지:
+
+  ```powershell
+  git merge-base --is-ancestor origin/main HEAD   # 실패하면 origin/main 위로 rebase
+  ```
+
+## 규칙: 앱 코드 변경 시 버전 올리기
+
+앱 동작이나 화면이 바뀌는 변경을 하면 배포 전에 `build-android.ps1` 의 `--version-code` 를 1 올리고 `--version-name` 을 올린다. 기존 버전 번호로 다시 빌드해서 덮어쓰지 않는다 — 같은 버전 이름의 APK가 서로 다른 내용이 되면 어느 빌드가 설치돼 있는지 알 수 없다.
+
+- 버그 수정/작은 UI 변경: 패치 자리 (`1.0.9` → `1.0.10`)
+- 기능 추가: 마이너 자리 (`1.0.10` → `1.1.0`)
+- 문서·빌드 스크립트만 고친 변경은 올리지 않는다
+
+## 규칙: APK 빌드 산출물은 다운로드 폴더에 압축 저장
+
+앱 APK를 빌드하면 결과물을 사용자 다운로드 폴더(`$env:USERPROFILE\Downloads`)에 zip으로 압축해 저장한다.
+
+```powershell
+./build-android.ps1
+$dl = Join-Path $env:USERPROFILE 'Downloads'
+$ver = (Select-String -Path build-android.ps1 -Pattern '--version-name\s+(\S+)').Matches[0].Groups[1].Value
+Compress-Archive -Path 'android-dist\IllusionLiveNotifier.apk' -DestinationPath (Join-Path $dl "IllusionLiveNotifier-android-v$ver.zip") -CompressionLevel Optimal -Force
+```
+
+- zip 안에는 APK 파일만 넣는다 (README, 중간 zip 등 다른 산출물 제외)
+- 저장 이름 뒤에 버전 번호를 붙인다: `IllusionLiveNotifier-android-v<버전>.zip` (예: `IllusionLiveNotifier-android-v1.0.5.zip`)
+- 버전은 `build-android.ps1` 의 `--version-name` 값을 그대로 쓴다 (하드코딩 금지)
+- Windows 빌드도 동일: `IllusionLiveNotifier-win-x64-v<버전>.zip`
+- 같은 버전 파일이 있으면 덮어쓴다 (`-Force`)
+- 저장 후 zip 경로와 SHA256 해시를 사용자에게 알린다
+
+## 참고
+
+- APK는 로컬 자체 서명 빌드. 키스토어: `C:\Android\illusion-tools\keys\illusionlive-notifier.p12`
+- 서명 비밀번호는 저장소에 두지 않는다. `ILLUSIONLIVE_KEYSTORE_PASSWORD` 환경변수로만 넘긴다
+- aapt2가 비ASCII 경로에서 실패하므로 빌드는 `C:\Android\illusion-tools\app-build` 에서 수행
+- 최소 지원: Android 8.0 (API 26)
