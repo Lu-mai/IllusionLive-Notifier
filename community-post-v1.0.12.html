@@ -1,0 +1,95 @@
+<style>
+	.post-photo-row {
+		display: flex;
+		justify-content: center;
+		gap: 8px;
+		max-width: 664px;
+		margin: 12px 0;
+	}
+
+	.post-photo-slot {
+		box-sizing: border-box;
+		flex: 0 0 calc((100% - 24px) / 4);
+		min-width: 0;
+		aspect-ratio: 9 / 16;
+		display: grid;
+		place-items: center;
+		border: 1px dashed #8a8a8a;
+		border-radius: 8px;
+		background: #f5f5f5;
+		color: #595959;
+		font-size: 12px;
+		overflow: hidden;
+	}
+
+	.post-photo-slot img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+</style>
+
+<main>
+
+	<h1>일루전 라이브 알리미</h1>
+	<section>
+
+		<h2>1) 뭐 하는 앱임?</h2>
+
+		<p>일루전 라이브 <strong>새 글 알림 앱</strong></p>
+
+		<p>원하는 게시판만 골라 알림 받을 수 있음</p>
+
+		<p>
+			<br>
+		</p>
+
+		<p>Android 8.0 이상 지원</p>
+	</section>
+  <section>
+
+		<h2>2) 보안상 안전함?</h2>
+
+		<ul>
+			<li>사이트의 공개 RSS 이용</li>
+			<li>별도 로그인&middot;계정 수집&middot;추적 기능 없음</li>
+			<li>설정은 기기 안에만 저장</li>
+		</ul>
+
+		<p>통신상 주고받는 데이터는 사이트와 주고받는 글/댓글 내역 외에는 없습니다</p>
+	</section>
+	<section>
+
+		<h2>3) 설치/사용법</h2>
+
+		<!-- 각 칸의 '사진 N'을 <img src="사진 경로 또는 URL" alt="화면 설명">로 교체하세요. -->
+		<ol>
+			<li>
+				<div class="post-photo-row" role="group" aria-label="다운로드 및 설치 사진">
+					<div class="post-photo-slot">사진 1</div>
+					<div class="post-photo-slot">사진 2</div>
+					<div class="post-photo-slot">사진 3</div>
+				</div>
+				<a href="https://github.com/soomin-319/IllusionLive-Notifier/releases/tag/v1.0.12">해당 페이지</a>에서 <code>IllusionLiveNotifier.apk</code> 다운로드 후 설치
+			</li>
+			<li>
+				<div class="post-photo-row" role="group" aria-label="알림 권한 및 배터리 설정 사진">
+					<div class="post-photo-slot">사진 1</div>
+					<div class="post-photo-slot">사진 2</div>
+				</div>
+				앱 실행 후 "알림 권한" 허용, "배터리 제한 없음" 설정
+			</li>
+			<li>
+				<div class="post-photo-row" role="group" aria-label="알림 받을 게시판 설정 사진">
+					<div class="post-photo-slot">사진 1</div>
+					<div class="post-photo-slot">사진 2</div>
+					<div class="post-photo-slot">사진 3</div>
+					<div class="post-photo-slot">사진 4</div>
+				</div>
+				설정에서 알림 받을 게시판 선택
+			</li>
+		</ol>
+	</section>
+
+</main>
