@@ -7,6 +7,12 @@ IllusionLive Notifier — `https://www.illusionlive.com/rss` 새 글 알림. And
 - `build-android.ps1` / `build.ps1` — 빌드 스크립트
 - 원격: `origin` = https://github.com/Lu-mai/IllusionLive-Notifier.git
 
+## GitHub 계정
+
+- 이 저장소의 커밋·push·PR·릴리스는 `Lu-mai` 계정으로만 수행한다.
+- 게시 전에 `gh api user --jq .login` 결과가 `Lu-mai`인지 확인한다. Git 인증과 GitHub CLI 인증은 별개다.
+- 다른 계정이면 게시를 중단한다. 전역 로그인은 변경하지 말고, 이 작업 프로세스에만 `Lu-mai` 인증을 적용한다. 토큰은 파일·로그·커밋에 남기지 않는다.
+
 ## 빌드
 
 ```powershell
