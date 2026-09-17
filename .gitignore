@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+.claude/settings.local.json
+dist/
+android-dist/
+IllusionLiveNotifier.Android/build/
+IllusionLiveNotifier.Android/build-test/
+*.zip
+.ui-test-pid
+/*.html
+headers.txt
+rss.xml
+ui-*.png
+.superpowers/
