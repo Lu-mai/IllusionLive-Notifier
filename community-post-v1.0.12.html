@@ -1,45 +1,15 @@
-<style>
-	.post-photo-row {
-		display: flex;
-		justify-content: center;
-		gap: 8px;
-		max-width: 664px;
-		margin: 12px 0;
-	}
-
-	.post-photo-slot {
-		box-sizing: border-box;
-		flex: 0 0 calc((100% - 24px) / 4);
-		min-width: 0;
-		aspect-ratio: 9 / 16;
-		display: grid;
-		place-items: center;
-		border: 1px dashed #8a8a8a;
-		border-radius: 8px;
-		background: #f5f5f5;
-		color: #595959;
-		font-size: 12px;
-		overflow: hidden;
-	}
-
-	.post-photo-slot img {
-		display: block;
-		width: 100%;
-		height: 100%;
-		object-fit: contain;
-	}
-</style>
-
 <main>
 
 	<h1>일루전 라이브 알리미</h1>
 	<section>
 
+		<p style="text-align: left;"><img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/79ac9db0bf246.jpg" alt="일루전 라이브 알리미의 새 글 목록" width="1440" height="3088" style="display: block; width: 100%; max-width: 240px; height: auto; margin: 0;"></p>
+
 		<h2>1) 뭐 하는 앱임?</h2>
 
 		<p>일루전 라이브 <strong>새 글 알림 앱</strong></p>
 
-		<p>원하는 게시판만 골라 알림 받을 수 있음</p>
+		<p>원하는 게시판만 골라 알림 받을 수 있습니다</p>
 
 		<p>
 			<br>
@@ -47,7 +17,7 @@
 
 		<p>Android 8.0 이상 지원</p>
 	</section>
-  <section>
+	<section>
 
 		<h2>2) 보안상 안전함?</h2>
 
@@ -57,39 +27,38 @@
 			<li>설정은 기기 안에만 저장</li>
 		</ul>
 
-		<p>통신상 주고받는 데이터는 사이트와 주고받는 글/댓글 내역 외에는 없습니다</p>
+		<p>통신상 주고받는 데이터는 사이트와 주고받는 글 내역 외에는 없습니다</p>
 	</section>
 	<section>
 
 		<h2>3) 설치/사용법</h2>
+		<!-- 게시판 편집기에 붙여넣을 수 있도록 배치 스타일을 각 요소에 직접 지정합니다. -->
 
-		<!-- 각 칸의 '사진 N'을 <img src="사진 경로 또는 URL" alt="화면 설명">로 교체하세요. -->
 		<ol>
 			<li>
-				<div class="post-photo-row" role="group" aria-label="다운로드 및 설치 사진">
-					<div class="post-photo-slot">사진 1</div>
-					<div class="post-photo-slot">사진 2</div>
-					<div class="post-photo-slot">사진 3</div>
+				<div aria-label="다운로드 및 설치 사진" role="group" class="post-photo-row" style="display: flex; justify-content: center; gap: 8px; max-width: 600px; margin: 12px 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/dcf47da062409.jpg" alt="GitHub 릴리스의 APK 다운로드 위치" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/42076dfb13061.jpg" alt="APK 설치 확인 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/04a02cb5bec8e.jpg" alt="Google Play 프로텍트 앱 검사 안내" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
 				</div>
-				<a href="https://github.com/soomin-319/IllusionLive-Notifier/releases/tag/v1.0.12">해당 페이지</a>에서 <code>IllusionLiveNotifier.apk</code> 다운로드 후 설치
+				<a href="https://github.com/Lu-mai/IllusionLive-Notifier/releases/tag/v1.0.12">해당 페이지</a>에서 <code>IllusionLiveNotifier.apk</code> 다운로드 후 설치
 			</li>
 			<li>
-				<div class="post-photo-row" role="group" aria-label="알림 권한 및 배터리 설정 사진">
-					<div class="post-photo-slot">사진 1</div>
-					<div class="post-photo-slot">사진 2</div>
+				<div aria-label="알림 권한 및 배터리 설정 사진" role="group" class="post-photo-row" style="display: flex; justify-content: center; gap: 8px; max-width: 600px; margin: 12px 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/95e067f3b71b8.jpg" alt="앱 알림 권한 허용 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/906b973888bfa.jpg" alt="배터리 사용량 최적화 중지 권한 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
 				</div>
-				앱 실행 후 "알림 권한" 허용, "배터리 제한 없음" 설정
+				앱 실행 후 &quot;알림 권한&quot; 허용, &quot;배터리 제한 없음&quot; 설정
 			</li>
 			<li>
-				<div class="post-photo-row" role="group" aria-label="알림 받을 게시판 설정 사진">
-					<div class="post-photo-slot">사진 1</div>
-					<div class="post-photo-slot">사진 2</div>
-					<div class="post-photo-slot">사진 3</div>
-					<div class="post-photo-slot">사진 4</div>
+				<div aria-label="알림 받을 게시판 설정 사진" role="group" class="post-photo-row" style="display: flex; justify-content: center; gap: 8px; max-width: 600px; margin: 12px 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/e4b2b7ee2159d.jpg" alt="게시판별 알림 설정 첫 번째 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/5149e7ceff824.jpg" alt="게시판별 알림 설정 두 번째 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/fe2d417ac32d4.jpg" alt="게시판별 알림 설정 세 번째 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
+					<img class="fr-dii" src="https://cdn.imweb.me/upload/S20220922a18e95cf78cee/01eff7b04aea2.jpg" alt="게시판별 알림 설정 네 번째 화면" width="1440" height="3088" style="display: block; width: calc((100% - 24px) / 4); min-width: 0; height: auto; margin: 0;">
 				</div>
 				설정에서 알림 받을 게시판 선택
 			</li>
 		</ol>
 	</section>
-
 </main>
