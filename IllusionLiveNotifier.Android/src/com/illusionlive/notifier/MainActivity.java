@@ -609,7 +609,7 @@ public final class MainActivity extends Activity {
         card.addView(commentSwitch(preferences, "내 글에 달린 댓글",
                 CommentChecker.KEY_MY_POSTS, !nickname.isEmpty()),
                 new LinearLayout.LayoutParams(-1, -2));
-        card.addView(commentSwitch(preferences, "내 댓글에 달린 답",
+        card.addView(commentSwitch(preferences, "내 댓글에 글쓴이가 단 답",
                 CommentChecker.KEY_MY_REPLIES, !nickname.isEmpty()),
                 new LinearLayout.LayoutParams(-1, -2));
         return card;

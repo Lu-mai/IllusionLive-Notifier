@@ -93,7 +93,7 @@ final class CommentChecker {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID, "댓글 알림", NotificationManager.IMPORTANCE_HIGH);
-        channel.setDescription("내 글에 달린 댓글과 내 댓글에 달린 답");
+        channel.setDescription("내 글에 달린 댓글과 내 댓글에 글쓴이가 단 답");
         manager.createNotificationChannel(channel);
     }
 
@@ -235,12 +235,12 @@ final class CommentChecker {
         }
     }
 
-    /** 캐시에 있으면 글 제목, 없으면 빈 문자열. 알림 문구에만 쓴다. */
-    private static String title(Context context, String url) {
+    /** 캐시에 있으면 그 글, 없으면 null. 알림 문구의 제목과 글쓴이 판단에 쓴다. */
+    private static FeedParser.Post cached(Context context, String url) {
         for (FeedParser.Post post : FeedChecker.cachedPosts(context)) {
-            if (post.url.equals(url)) return post.title;
+            if (post.url.equals(url)) return post;
         }
-        return "";
+        return null;
     }
 
     /**
@@ -290,8 +290,9 @@ final class CommentChecker {
             }
             tracked = TrackedPosts.markChecked(tracked, post.url, now);
 
-            List<CommentParser.Comment> picked = CommentRules.pick(
-                    comments, seen, nickname, post.reason, myPosts, myReplies);
+            FeedParser.Post source = cached(context, post.url);
+            List<CommentParser.Comment> picked = CommentRules.pick(comments, seen, nickname,
+                    source == null ? "" : source.author, post.reason, myPosts, myReplies);
             // 고른 뒤에 기록한다. 순서가 바뀌면 이번에 알릴 것까지 본 것으로 표시된다.
             for (CommentParser.Comment comment : comments) seenNow.add(comment.code);
 
@@ -299,7 +300,7 @@ final class CommentChecker {
             // post 는 markChecked 이전 값이라 checked 는 이번 사이클 전 상태 그대로다. 사이클당
             // CHECK_PER_CYCLE 개만 확인하므로 전역 플래그 하나로는 이 시점을 글마다 판단할 수 없다.
             if (post.checked == 0) continue;
-            String postTitle = title(context, post.url);
+            String postTitle = source == null ? "" : source.title;
             for (CommentParser.Comment comment : picked) {
                 fresh.add(new Hit(comment, post.url, postTitle));
             }
@@ -327,9 +328,11 @@ final class CommentChecker {
                 tracked = TrackedPosts.add(tracked, candidate.url, candidate.postCode,
                         candidate.boardCode, TrackedPosts.MY_COMMENT, now);
                 tracked = TrackedPosts.markChecked(tracked, candidate.url, now);
-                String postTitle = title(context, candidate.url);
-                for (CommentParser.Comment comment : CommentRules.pick(
-                        comments, seen, nickname, TrackedPosts.MY_COMMENT, myPosts, myReplies)) {
+                FeedParser.Post source = cached(context, candidate.url);
+                String postTitle = source == null ? "" : source.title;
+                for (CommentParser.Comment comment : CommentRules.pick(comments, seen, nickname,
+                        source == null ? "" : source.author, TrackedPosts.MY_COMMENT,
+                        myPosts, myReplies)) {
                     fresh.add(new Hit(comment, candidate.url, postTitle));
                 }
                 for (CommentParser.Comment comment : comments) seenNow.add(comment.code);

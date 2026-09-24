@@ -417,42 +417,55 @@ public final class SelfTest {
         thread.add(new CommentParser.Comment("c4", "유메루", "m2", "앞으로도 잘 부탁해!!"));
         Set<String> none = new HashSet<>();
 
-        // 내 댓글 바로 다음 한 건만.
+        // 내 댓글 바로 다음 한 건. 그 댓글을 글쓴이가 썼을 때만.
         List<CommentParser.Comment> mine = CommentRules.pick(
-                thread, none, "위즐리어카", TrackedPosts.MY_COMMENT, true, true);
+                thread, none, "위즐리어카", "유메루", TrackedPosts.MY_COMMENT, true, true);
         assert mine.size() == 1 : "바로 다음 한 건, 실제 " + mine.size();
         assert "c2".equals(mine.get(0).code);
 
         List<CommentParser.Comment> hers = CommentRules.pick(
-                thread, none, "현랑화", TrackedPosts.MY_COMMENT, true, true);
+                thread, none, "현랑화", "유메루", TrackedPosts.MY_COMMENT, true, true);
         assert hers.size() == 1 && "c4".equals(hers.get(0).code) : "c3 다음은 c4";
+
+        // 바로 다음 댓글이라도 글쓴이가 쓴 것이 아니면 알리지 않는다.
+        assert CommentRules.pick(thread, none, "현랑화", "달다구리",
+                TrackedPosts.MY_COMMENT, true, true).isEmpty() : "c4 는 글쓴이가 쓴 것이 아니다";
+        assert CommentRules.pick(thread, none, "위즐리어카", "현랑화",
+                TrackedPosts.MY_COMMENT, true, true).isEmpty() : "c2 는 글쓴이가 쓴 것이 아니다";
+
+        // 글쓴이를 모르면(캐시 밖 글) 빈 닉네임끼리 맞아떨어지지 않는다.
+        List<CommentParser.Comment> anonymous = new ArrayList<>();
+        anonymous.add(new CommentParser.Comment("c5", "현랑화", "m3", "밑에 링크요"));
+        anonymous.add(new CommentParser.Comment("c6", "", "", "닉네임을 못 읽은 댓글"));
+        assert CommentRules.pick(anonymous, none, "현랑화", "", TrackedPosts.MY_COMMENT, true, true)
+                .isEmpty() : "글쓴이 미상이면 답 알림 없음";
 
         // 내 글이면 그 글의 새 댓글 전부. 단 내가 쓴 댓글은 빼고.
         List<CommentParser.Comment> onMyPost = CommentRules.pick(
-                thread, none, "유메루", TrackedPosts.MY_POST, true, true);
+                thread, none, "유메루", "유메루", TrackedPosts.MY_POST, true, true);
         assert onMyPost.size() == 2 : "내 댓글 두 개를 뺀 나머지, 실제 " + onMyPost.size();
         assert "c1".equals(onMyPost.get(0).code) && "c3".equals(onMyPost.get(1).code);
 
         // 이미 본 댓글은 다시 알리지 않는다.
         Set<String> seenC2 = new HashSet<>(Arrays.asList("c2"));
-        assert CommentRules.pick(thread, seenC2, "위즐리어카",
+        assert CommentRules.pick(thread, seenC2, "위즐리어카", "유메루",
                 TrackedPosts.MY_COMMENT, true, true).isEmpty() : "본 댓글은 제외";
 
         // 스위치가 꺼져 있으면 그 사유는 아무것도 고르지 않는다.
-        assert CommentRules.pick(thread, none, "위즐리어카",
+        assert CommentRules.pick(thread, none, "위즐리어카", "유메루",
                 TrackedPosts.MY_COMMENT, true, false).isEmpty() : "스위치2 off";
-        assert CommentRules.pick(thread, none, "유메루",
+        assert CommentRules.pick(thread, none, "유메루", "유메루",
                 TrackedPosts.MY_POST, false, true).isEmpty() : "스위치1 off";
 
         // 두 사유가 겹쳐도 같은 댓글이 두 번 나오지 않는다.
-        List<CommentParser.Comment> both = CommentRules.pick(thread, none, "위즐리어카",
+        List<CommentParser.Comment> both = CommentRules.pick(thread, none, "위즐리어카", "유메루",
                 TrackedPosts.MY_POST | TrackedPosts.MY_COMMENT, true, true);
         assert both.size() == 3 : "c2·c3·c4 세 건, 실제 " + both.size();
         assert "c2".equals(both.get(0).code) && "c4".equals(both.get(2).code) : "순서 유지";
 
         // 닉네임이 비어 있으면 아무것도 알리지 않는다.
-        assert CommentRules.pick(thread, none, "", TrackedPosts.MY_POST, true, true).isEmpty()
-                : "닉네임 없으면 기능 자체가 꺼진 상태";
+        assert CommentRules.pick(thread, none, "", "유메루", TrackedPosts.MY_POST, true, true)
+                .isEmpty() : "닉네임 없으면 기능 자체가 꺼진 상태";
 
         System.out.println("SELF-TEST PASS");
     }
